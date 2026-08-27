@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Giới thiệu bản thân | Văn Huy</title>
+	<meta name="description" content="Trang giới thiệu bản thân của Văn Huy, một người yêu công nghệ và sáng tạo.">
+	<link rel="preconnect" href="https://fonts.googleapis.com">
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+	<style>
+		:root {
+			--ink: #162126;
+			--muted: #667277;
+			--paper: #f7f6f1;
+			--mint: #c9e8dc;
+			--coral: #ff856f;
+			--line: rgba(22, 33, 38, 0.13);
+		}
+
+		* { box-sizing: border-box; margin: 0; padding: 0; }
+		html { scroll-behavior: smooth; }
+		body {
+			background: var(--paper);
+			color: var(--ink);
+			font-family: "DM Sans", sans-serif;
+			line-height: 1.6;
+		}
+		a { color: inherit; text-decoration: none; }
+		.page { max-width: 1180px; margin: auto; padding: 0 34px 70px; }
+
+		header {
+			display: flex; align-items: center; justify-content: space-between;
+			padding: 28px 0; border-bottom: 1px solid var(--line);
+		}
+		.logo { font: 700 1.15rem "Space Grotesk", sans-serif; letter-spacing: 0; }
+		.logo span { color: var(--coral); }
+		nav { display: flex; gap: 28px; color: var(--muted); font-size: .92rem; }
+		nav a:hover { color: var(--ink); }
+
+		.hero {
+			min-height: 570px; display: grid; grid-template-columns: 1.15fr .85fr;
+			align-items: center; gap: 70px; padding: 72px 0 80px;
+		}
+		.eyebrow {
+			display: inline-flex; align-items: center; gap: 9px; color: #397765;
+			font-size: .8rem; font-weight: 700; letter-spacing: .1em; text-transform: uppercase;
+			margin-bottom: 22px;
+		}
+		.eyebrow::before { content: ""; width: 30px; height: 2px; background: var(--coral); }
+		h1, h2 { font-family: "Space Grotesk", sans-serif; letter-spacing: 0; line-height: 1.05; }
+		h1 { max-width: 680px; font-size: clamp(3.5rem, 8vw, 6.8rem); }
+		h1 em { color: var(--coral); font-style: normal; }
+		.intro { max-width: 490px; margin: 26px 0 32px; color: var(--muted); font-size: 1.08rem; }
+		.actions { display: flex; flex-wrap: wrap; gap: 12px; }
+		.button {
+			display: inline-flex; align-items: center; justify-content: center; gap: 9px;
+			border: 1px solid var(--ink); padding: 13px 20px; font-weight: 700; font-size: .92rem;
+			transition: transform .2s, box-shadow .2s;
+		}
+		.button:hover { transform: translateY(-3px); box-shadow: 4px 4px 0 var(--ink); }
+		.button.primary { background: var(--ink); color: white; }
+		.button.secondary { background: transparent; }
+
+		.portrait-wrap { position: relative; max-width: 390px; justify-self: end; }
+		.portrait {
+			aspect-ratio: 4 / 5; display: grid; place-items: center; position: relative;
+			overflow: hidden; background: var(--mint); border-radius: 48% 48% 7px 7px;
+			border: 1px solid var(--ink); box-shadow: 14px 14px 0 var(--coral);
+		}
+		.portrait::after { content: "✦"; position: absolute; top: 22px; right: 30px; color: white; font-size: 2rem; }
+		.avatar { width: 64%; height: 64%; border-radius: 50%; background: #f0b396; position: relative; }
+		.avatar::before { content: ""; position: absolute; inset: -11% 0 38%; border-radius: 50% 50% 35% 35%; background: #352e2a; }
+		.avatar::after { content: ""; position: absolute; width: 28%; height: 8%; left: 36%; bottom: 22%; border-bottom: 3px solid #352e2a; border-radius: 50%; }
+		.badge { position: absolute; bottom: -29px; left: -27px; padding: 13px 16px; background: white; border: 1px solid var(--ink); font-size: .8rem; font-weight: 700; }
+
+		.section { border-top: 1px solid var(--line); padding: 76px 0; }
+		.section-heading { display: flex; justify-content: space-between; gap: 30px; margin-bottom: 42px; }
+		h2 { font-size: clamp(2.1rem, 4vw, 3.5rem); }
+		.section-heading p { max-width: 360px; color: var(--muted); }
+		.cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+		.card { min-height: 200px; padding: 25px; border: 1px solid var(--line); background: white; }
+		.card:nth-child(2) { background: var(--mint); }
+		.card:nth-child(3) { background: #ffe0d8; }
+		.card-number { color: var(--coral); font: 700 1.1rem "Space Grotesk", sans-serif; }
+		.card h3 { margin: 37px 0 8px; font: 600 1.35rem "Space Grotesk", sans-serif; }
+		.card p { color: var(--muted); font-size: .93rem; }
+		.contact { display: flex; align-items: end; justify-content: space-between; gap: 30px; }
+		.contact h2 { max-width: 600px; }
+		.contact-link { color: var(--coral); font-weight: 700; white-space: nowrap; border-bottom: 2px solid var(--coral); padding-bottom: 4px; }
+		footer { display: flex; justify-content: space-between; color: var(--muted); font-size: .84rem; padding-top: 24px; }
+
+		@keyframes rise { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+		.hero-copy, .portrait-wrap { animation: rise .7s ease both; }
+		.portrait-wrap { animation-delay: .15s; }
+		@media (max-width: 700px) {
+			.page { padding: 0 20px 45px; }
+			header { padding: 20px 0; }
+			nav { gap: 14px; font-size: .8rem; }
+			.hero { grid-template-columns: 1fr; gap: 42px; padding: 60px 0 75px; }
+			h1 { font-size: 4rem; }
+			.portrait-wrap { width: 78%; justify-self: center; }
+			.section { padding: 55px 0; }
+			.section-heading, .contact { display: block; }
+			.section-heading p { margin-top: 18px; }
+			.cards { grid-template-columns: 1fr; }
+			.contact-link { display: inline-block; margin-top: 28px; }
+			footer { display: block; }
+			footer span { display: block; margin-top: 5px; }
+		}
+	</style>
+</head>
+<body>
+	<div class="page">
+		<header>
+			<a class="logo" href="#top">MA<span>.</span></a>
+			<nav aria-label="Điều hướng chính">
+				<a href="#about">Về tôi</a>
+				<a href="#skills">Kỹ năng</a>
+				<a href="#contact">Liên hệ</a>
+			</nav>
+		</header>
+
+		<main id="top">
+			<section class="hero" aria-labelledby="hero-title">
+				<div class="hero-copy">
+					<p class="eyebrow">Xin chào, mình là</p>
+					<h1>Văn <em>Huy</em></h1>
+					<p class="intro">Một người yêu thích công nghệ, thiết kế và những ý tưởng có thể làm cuộc sống trở nên đơn giản hơn.</p>
+					<div class="actions">
+						<a class="button primary" href="#contact">Kết nối với mình <span aria-hidden="true">↗</span></a>
+						<a class="button secondary" href="#about">Tìm hiểu thêm</a>
+					</div>
+				</div>
+				<div class="portrait-wrap" aria-label="Ảnh minh họa chân dung Minh Anh">
+					<div class="portrait"><div class="avatar"></div></div>
+					<div class="badge">Đang khám phá điều mới ✦</div>
+				</div>
+			</section>
+
+			<section class="section" id="about" aria-labelledby="about-title">
+				<div class="section-heading">
+					<h2 id="about-title">Một chút<br>về mình.</h2>
+					<p>Mình tin rằng sản phẩm tốt bắt đầu từ sự tò mò, lắng nghe và một chút can đảm để thử cách làm khác.</p>
+				</div>
+				<div class="cards" id="skills">
+					<article class="card"><span class="card-number">01</span><h3>Sáng tạo</h3><p>Luôn tìm cách biến những ý tưởng nhỏ thành trải nghiệm đáng nhớ.</p></article>
+					<article class="card"><span class="card-number">02</span><h3>Học hỏi</h3><p>Thích khám phá công nghệ mới và chia sẻ những điều mình học được.</p></article>
+					<article class="card"><span class="card-number">03</span><h3>Kết nối</h3><p>Trân trọng những cuộc trò chuyện chân thành và cơ hội hợp tác ý nghĩa.</p></article>
+				</div>
+			</section>
+
+			<section class="section contact" id="contact" aria-labelledby="contact-title">
+				<h2 id="contact-title">Cùng tạo ra<br>điều thú vị nhé?</h2>
+				<a class="contact-link" href="mailto:hello@minhanh.dev">hello@minhanh.dev ↗</a>
+			</section>
+		</main>
+
+		<footer><span>© 2026 Văn Huy</span><span>Made with curiosity.</span></footer>
+	</div>
+</body>
+</html>
