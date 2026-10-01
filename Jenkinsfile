@@ -21,6 +21,18 @@ pipeline {
 
                     try {
                         checkout scm
+                        
+                        // Cài đặt Node.js và npm nhanh trong môi trường Jenkins container nếu chưa có
+                        sh '''
+                            if ! command -v npm &> /dev/null
+                            then
+                                echo "Installing Node.js and npm..."
+                                apt-get update && apt-get install -y curl
+                                curl -fsSL https://deb.nodesource.com/setup_20.x | bash -
+                                apt-get install -y nodejs
+                            fi
+                        '''
+
                         sh 'npm install --global vercel'
                         sh 'vercel deploy --prod --yes --token ${VERCEL_TOKEN} --org ${ORG_ID} --project ${PROJECT_ID}'
 
