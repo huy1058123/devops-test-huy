@@ -12,11 +12,13 @@ pipeline {
     stages {
         stage('Deploy Started') {
             steps {
-                sh '''
-                    curl -s -X POST "https://api.telegram.org/bot${TELEGRAM_TOKEN}/sendMessage" \
-                    -d "chat_id=${TELEGRAM_CHAT_ID}" \
-                    -d "text=🚀 DEPLOY STARTED%0AProject: ${JOB_NAME}%0ABranch: main"
-                '''
+                script {
+                    sh '''
+                        curl -s -X POST "https://api.telegram.org/bot${TELEGRAM_TOKEN}/sendMessage" \
+                        -d "chat_id=${TELEGRAM_CHAT_ID}" \
+                        -d "text=🚀 DEPLOY STARTED%0AProject: ${JOB_NAME}%0ABranch: main"
+                    '''
+                }
             }
         }
 
@@ -41,18 +43,26 @@ pipeline {
 
     post {
         success {
-            sh '''
-                curl -s -X POST "https://api.telegram.org/bot${TELEGRAM_TOKEN}/sendMessage" \
-                -d "chat_id=${TELEGRAM_CHAT_ID}" \
-                -d "text=✅ DEPLOY SUCCESS%0AProject: ${JOB_NAME}%0ABranch: main"
-            '''
+            script {
+                node('any') {
+                    sh '''
+                        curl -s -X POST "https://api.telegram.org/bot${TELEGRAM_TOKEN}/sendMessage" \
+                        -d "chat_id=${TELEGRAM_CHAT_ID}" \
+                        -d "text=✅ DEPLOY SUCCESS%0AProject: ${JOB_NAME}%0ABranch: main"
+                    '''
+                }
+            }
         }
         failure {
-            sh '''
-                curl -s -X POST "https://api.telegram.org/bot${TELEGRAM_TOKEN}/sendMessage" \
-                -d "chat_id=${TELEGRAM_CHAT_ID}" \
-                -d "text=❌ DEPLOY FAILED%0AProject: ${JOB_NAME}%0ABranch: main%0APlease check Jenkins."
-            '''
+            script {
+                node('any') {
+                    sh '''
+                        curl -s -X POST "https://api.telegram.org/bot${TELEGRAM_TOKEN}/sendMessage" \
+                        -d "chat_id=${TELEGRAM_CHAT_ID}" \
+                        -d "text=❌ DEPLOY FAILED%0AProject: ${JOB_NAME}%0ABranch: main%0APlease check Jenkins."
+                    '''
+                }
+            }
         }
     }
 }
