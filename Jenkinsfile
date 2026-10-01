@@ -4,7 +4,7 @@ pipeline {
     environment {
         TELEGRAM_TOKEN = credentials('telegram-bot-token')
         TELEGRAM_CHAT_ID = credentials('telegram-chat-id')
-        VERCEL_TOKEN = credentials('vercel-token')
+        VERCEL_TOKEN = 'YOUR_VERCEL_TOKEN_THAT'
         ORG_ID = 'team_qEZzGlZZ1VArMwkB2iuycr1E'
         PROJECT_ID = 'prj_rqSB4A9XDWHSsQqAN6MGN4SDQqV2'
     }
