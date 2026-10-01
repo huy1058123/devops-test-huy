@@ -4,7 +4,7 @@ pipeline {
     environment {
         TELEGRAM_TOKEN = credentials('telegram-bot-token')
         TELEGRAM_CHAT_ID = credentials('telegram-chat-id')
-        VERCEL_TOKEN = 'YOUR_VERCEL_TOKEN_THAT'
+        VERCEL_TOKEN = credentials('vercel-token')
         ORG_ID = 'team_qEZzGlZZ1VArMwkB2iuycr1E'
         PROJECT_ID = 'prj_rqSB4A9XDWHSsQqAN6MGN4SDQqV2'
     }
@@ -22,19 +22,25 @@ pipeline {
                     try {
                         checkout scm
                         
-                        // Cài đặt Node.js và npm nhanh trong môi trường Jenkins container nếu chưa có
+                        // Tự cài Node.js local vào thư mục workspace mà không cần quyền root
                         sh '''
-                            if ! command -v npm &> /dev/null
-                            then
-                                echo "Installing Node.js and npm..."
-                                apt-get update && apt-get install -y curl
-                                curl -fsSL https://deb.nodesource.com/setup_20.x | bash -
-                                apt-get install -y nodejs
+                            export NODE_VERSION=20.11.0
+                            export PATH=$WORKSPACE/node/bin:$PATH
+                            
+                            if [ ! -d "$WORKSPACE/node" ]; then
+                                echo "Downloading Node.js..."
+                                curl -O https://nodejs.org/dist/v$NODE_VERSION/node-v$NODE_VERSION-linux-x64.tar.xz
+                                mkdir -p $WORKSPACE/node
+                                tar -xJf node-v$NODE_VERSION-linux-x64.tar.xz -C $WORKSPACE/node --strip-components=1
                             fi
                         '''
 
-                        sh 'npm install --global vercel'
-                        sh 'vercel deploy --prod --yes --token ${VERCEL_TOKEN} --org ${ORG_ID} --project ${PROJECT_ID}'
+                        // Chạy lệnh vercel với token bảo mật từ Jenkins Credentials
+                        sh '''
+                            export PATH=$WORKSPACE/node/bin:$PATH
+                            npm install --global vercel
+                            vercel deploy --prod --yes --token ${VERCEL_TOKEN} --org ${ORG_ID} --project ${PROJECT_ID}
+                        '''
 
                         sh '''
                             curl -s -X POST "https://api.telegram.org/bot${TELEGRAM_TOKEN}/sendMessage" \
