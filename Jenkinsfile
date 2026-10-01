@@ -22,16 +22,16 @@ pipeline {
                     try {
                         checkout scm
                         
-                        // Tự cài Node.js local vào thư mục workspace mà không cần quyền root
+                        // Tải Node.js bản .tar.gz tương thích sẵn với tar mặc định
                         sh '''
                             export NODE_VERSION=20.11.0
                             export PATH=$WORKSPACE/node/bin:$PATH
                             
                             if [ ! -d "$WORKSPACE/node" ]; then
                                 echo "Downloading Node.js..."
-                                curl -O https://nodejs.org/dist/v$NODE_VERSION/node-v$NODE_VERSION-linux-x64.tar.xz
+                                curl -O https://nodejs.org/dist/v$NODE_VERSION/node-v$NODE_VERSION-linux-x64.tar.gz
                                 mkdir -p $WORKSPACE/node
-                                tar -xJf node-v$NODE_VERSION-linux-x64.tar.xz -C $WORKSPACE/node --strip-components=1
+                                tar -xzf node-v$NODE_VERSION-linux-x64.tar.gz -C $WORKSPACE/node --strip-components=1
                             fi
                         '''
 
