@@ -23,16 +23,16 @@ pipeline {
                         checkout scm
                         
                         // Tải Node.js bản .tar.gz tương thích sẵn với tar mặc định
+                        // Tự làm sạch và tải lại Node.js bản .tar.gz để đảm bảo không bị thiếu file
                         sh '''
                             export NODE_VERSION=20.11.0
                             export PATH=$WORKSPACE/node/bin:$PATH
                             
-                            if [ ! -d "$WORKSPACE/node" ]; then
-                                echo "Downloading Node.js..."
-                                curl -O https://nodejs.org/dist/v$NODE_VERSION/node-v$NODE_VERSION-linux-x64.tar.gz
-                                mkdir -p $WORKSPACE/node
-                                tar -xzf node-v$NODE_VERSION-linux-x64.tar.gz -C $WORKSPACE/node --strip-components=1
-                            fi
+                            rm -rf $WORKSPACE/node
+                            echo "Downloading Node.js..."
+                            curl -O https://nodejs.org/dist/v$NODE_VERSION/node-v$NODE_VERSION-linux-x64.tar.gz
+                            mkdir -p $WORKSPACE/node
+                            tar -xzf node-v$NODE_VERSION-linux-x64.tar.gz -C $WORKSPACE/node --strip-components=1
                         '''
 
                         // Chạy lệnh vercel với token bảo mật từ Jenkins Credentials
