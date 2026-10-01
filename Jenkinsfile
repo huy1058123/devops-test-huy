@@ -5,20 +5,18 @@ pipeline {
         TELEGRAM_TOKEN = credentials('telegram-bot-token')
         TELEGRAM_CHAT_ID = credentials('telegram-chat-id')
         VERCEL_TOKEN = credentials('vercel-token')
-        VERCEL_ORG_ID = credentials('vercel-org-id')
-        VERCEL_PROJECT_ID = credentials('vercel-project-id')
+        ORG_ID = credentials('vercel-org-id')
+        PROJECT_ID = credentials('vercel-project-id')
     }
 
     stages {
         stage('Deploy Started') {
             steps {
-                script {
-                    sh '''
-                        curl -s -X POST "https://api.telegram.org/bot${TELEGRAM_TOKEN}/sendMessage" \
-                        -d "chat_id=${TELEGRAM_CHAT_ID}" \
-                        -d "text=🚀 DEPLOY STARTED%0AProject: ${JOB_NAME}%0ABranch: main"
-                    '''
-                }
+                sh '''
+                    curl -s -X POST "https://api.telegram.org/bot${TELEGRAM_TOKEN}/sendMessage" \
+                    -d "chat_id=${TELEGRAM_CHAT_ID}" \
+                    -d "text=🚀 DEPLOY STARTED%0AProject: ${JOB_NAME}%0ABranch: main"
+                '''
             }
         }
 
@@ -28,41 +26,33 @@ pipeline {
             }
         }
 
-        stage('Install dependencies & Build') {
+        stage('Install dependencies') {
             steps {
                 sh 'npm install --global vercel'
             }
         }
 
-        stage('Deploy') {
+        stage('Deploy to Vercel') {
             steps {
-                script {
-                    sh "vercel pull --yes --environment=production --token ${VERCEL_TOKEN} --scope ${VERCEL_ORG_ID}"
-                    sh "vercel build --prod --token ${VERCEL_TOKEN}"
-                    sh "vercel deploy --prod --yes --token ${VERCEL_TOKEN}"
-                }
+                sh 'vercel deploy --prod --yes --token ${VERCEL_TOKEN} --org ${ORG_ID} --project ${PROJECT_ID}'
             }
         }
     }
 
     post {
         success {
-            script {
-                sh '''
-                    curl -s -X POST "https://api.telegram.org/bot${TELEGRAM_TOKEN}/sendMessage" \
-                    -d "chat_id=${TELEGRAM_CHAT_ID}" \
-                    -d "text=✅ DEPLOY SUCCESS%0AProject: ${JOB_NAME}%0ABranch: main"
-                '''
-            }
+            sh '''
+                curl -s -X POST "https://api.telegram.org/bot${TELEGRAM_TOKEN}/sendMessage" \
+                -d "chat_id=${TELEGRAM_CHAT_ID}" \
+                -d "text=✅ DEPLOY SUCCESS%0AProject: ${JOB_NAME}%0ABranch: main"
+            '''
         }
         failure {
-            script {
-                sh '''
-                    curl -s -X POST "https://api.telegram.org/bot${TELEGRAM_TOKEN}/sendMessage" \
-                    -d "chat_id=${TELEGRAM_CHAT_ID}" \
-                    -d "text=❌ DEPLOY FAILED%0AProject: ${JOB_NAME}%0ABranch: main%0APlease check Jenkins."
-                '''
-            }
+            sh '''
+                curl -s -X POST "https://api.telegram.org/bot${TELEGRAM_TOKEN}/sendMessage" \
+                -d "chat_id=${TELEGRAM_CHAT_ID}" \
+                -d "text=❌ DEPLOY FAILED%0AProject: ${JOB_NAME}%0ABranch: main%0APlease check Jenkins."
+            '''
         }
     }
 }
